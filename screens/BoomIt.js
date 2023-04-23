@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TextInput, TouchableOpacity, Image } from 'react-native';
 import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/native';
 
-
-const backgroundImage = require('./../assets/wallpaper2.jpg');
+const backgroundImage = require('./../assets/homeimage.jpg');
 const buttonImage1 = require('./../assets/artistimage.jpg');
 const buttonImage2 = require('./../assets/musicimage.jpg');
 const buttonImage3 = require('./../assets/playlistimage.jpg');
 
 
-const HomeScreen = () => {
+const BoomIt= () => {
   const handleButtonPress = () => {
     // handle button press
   };
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -23,13 +24,13 @@ const HomeScreen = () => {
           <TextInput style={styles.searchInput} placeholder="Search for artists or songs" placeholderTextColor="gray"/>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={handleButtonPress} style={styles.button}> <text style={styles.inside}>Artists</text>
+          <TouchableOpacity onPress={()=>navigation.navigate('Music')} style={styles.button}> <text style={styles.inside}>Songs</text>
             <Image source={buttonImage1} style={styles.buttonImage} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleButtonPress} style={styles.button}> <text style={styles.inside}>Albums</text>
+          <TouchableOpacity onPress={()=>navigation.navigate('Artist')} style={styles.button}> <text style={styles.inside}>Artist</text>
             <Image source={buttonImage2} style={styles.buttonImage} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleButtonPress} style={styles.button}> <text style={styles.inside}>Playlists</text>
+          <TouchableOpacity onPress={()=>navigation.navigate('Playlist')} style={styles.button}> <text style={styles.inside}>Playlists</text>
             <Image source={buttonImage3} style={styles.buttonImage} />
           </TouchableOpacity>
           
@@ -122,4 +123,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomeScreen;
+export default BoomIt;

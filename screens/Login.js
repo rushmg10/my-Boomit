@@ -38,11 +38,11 @@ export default function LoginScreen() {
           value={password}
           onChangeText={setPassword}
         />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('About')}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity >
         
-        <TouchableOpacity onPress={()=>navigation.navigate('Registration')}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Registeration')}>
           <Text style={styles.link}>new user? </Text>
         </TouchableOpacity>
       </View>
