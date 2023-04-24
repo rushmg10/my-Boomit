@@ -101,6 +101,7 @@ const ArtistScreen = () => {
                 <Image source={{ uri: artist.image }} style={styles.buttonImage} />
                 <Text style={styles.buttonText}>{artist.name}</Text>
               </TouchableOpacity>
+              
             ))
           )}
         </View>

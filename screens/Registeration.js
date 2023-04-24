@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, TextInput, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, TextInput,Button, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import db from '../database/db'; // import the db.js file
+
+
+
 
 const backgroundImage = require('./../assets/image3.jpg');
 
@@ -13,38 +15,53 @@ export default function RegistrationScreen() {
   const [retypePassword, setRetypePassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [email, setEmail] = useState('');
-
-  // email validation
+ 
+  //email validation
   const [isValidEmail, setIsValidEmail] = useState(false);
   const emailRegex = /\S+@\S+\.\S+/;
 
-  const navigation = useNavigation();
 
+
+ 
   const handleRegistration = async () => {
     try {
-      // Check if username already exists
-      const user = await db.query(`SELECT * FROM users WHERE username = '${username}'`);
-      if (user.length > 0) {
-        setErrorMessage('Username already exists');
-      } else {
-        // Insert new user into the database
-        await db.query(`INSERT INTO users (name, username, age, password, email) VALUES ('${name}', '${username}', '${age}', '${password}', '${email}')`);
-        console.log('New user added to the database');
-
-        // Navigate to login screen
-        navigation.navigate('Login');
+      // Send a POST request to the server with the user data
+      const response = await fetch('http://127.0.0.1:19000/api/users', {  //*****/
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          age,
+          password,
+          email
+        })
+      });
+  
+      if (!response.ok) {
+        // If the response from the server is not ok (i.e. 4xx or 5xx status code),
+        // throw an error with the response status text
+        throw new Error(response.statusText);
       }
+  
+      // Navigate to login screen
+      navigation.navigate('Login');
     } catch (error) {
       console.error(error);
       setErrorMessage('Registration failed. Please try again later.');
     }
   }
+  
+  
+  const navigation = useNavigation();
 
   const handleSubmit = () => {
     if (password !== retypePassword) {
       setErrorMessage("Passwords don't match");
     } else {
-      handleRegistration();
+      // Handle form submission
     }
   };
 
@@ -80,26 +97,26 @@ export default function RegistrationScreen() {
             onChangeText={setPassword}
           />
           <TextInput
-            style={styles.input}
+            style={styles.input}          
             secureTextEntry={true}
             placeholder="Retype password"
             value={retypePassword}
             onChangeText={(text) => setRetypePassword(text)}
-          />
+          />          
           <TextInput
-            icon="mail"
-            style={styles.input}
-            placeholder="Email"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-              setIsValidEmail(emailRegex.test(text));
-            }}
+          icon="mail"
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+            setIsValidEmail(emailRegex.test(text));
+          }}
           />
-          <TouchableOpacity style={[styles.button, !isValidEmail && { opacity: 0.5 }]} onPress={handleSubmit}
-            disabled={!isValidEmail}>
-            <Text style={styles.buttonText}>Register</Text>
+          <TouchableOpacity style={[styles.button, !isValidEmail && { opacity: 0.5 }]} onPress={()=>navigation.navigate('Login')}
+          disabled={!isValidEmail}>
+          <Text style={styles.buttonText}>Register</Text> 
           </TouchableOpacity>
           {errorMessage ? <Text>{errorMessage}</Text> : null}
           <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
